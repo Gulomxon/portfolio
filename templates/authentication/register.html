@@ -9,24 +9,66 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h2>Registration</h2>
-    <form method="post">
-        {% csrf_token %}
-        {% for field in register_form %}
-            <p>
-                {{ field.label_tag }}
-                {{ field }}
-
-                {% if field.help_text %}
-                <h4 class="help-text">{{ field.help_text }}</h4>
-                {% endif %}
-
-                {% for error in field.errors%}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            </p>
-        {% endfor %}
-        <button type="submit">Register</button>
-    </form>            
+    {% if formfields %}
+        <div class="errors">
+            {{formfields.last_name.errors}}
+            {{formfields.first_name.errors}}
+            {{formfields.username.errors}}
+            {{formfields.email.errors}}
+            {{formfields.password1.errors}}
+            {{formfields.password2.errors}}
+        </div>
+    {% endif %}
+    <div class="sign_in_up">
+        <div class="reg_and_log">
+            <div class="control-btn registration_btn active">Sign up</div>
+            <div class="control-btn login_btn">Sign in</div>
+            <div class="backgroundred"></div>
+        </div>
+        <div class="frame">
+            <div class="runner" {% if log %}
+              style = "transform: translateX(-50%);"
+            {% endif %}>
+                <form class="registration" action="{% url 'register' %}" method="post">
+                    {% csrf_token %}
+                    <div class="first_last-name block">
+                        <label for="id_first_name" class="firstname_lab active_lab">First name</label>
+                        {{formfields.first_name}}
+                        <label for="id_last_name" class="lastname_lab">Last name</label>
+                        {{formfields.last_name}}
+                    </div>
+                    <div class="username_block block">
+                        <label for="id_username" class="username_lab">Username</label>
+                        {{formfields.username}}
+                    </div>
+                    <div class="email_block block">
+                        <label for="id_email" class="email_lab">Email</label>
+                        {{formfields.email}}
+                        <div class="email_check"></div>
+                    </div>
+                    <div class="password_block block">
+                        <label for="id_password1" class="password1_lab">Password</label>
+                        {{formfields.password1}}
+                        <label for="id_password2" class="password2_lab">Confirm password</label>
+                        {{formfields.password2}}
+                    </div>
+                    <button type="submit" class="registrate" tabindex="7">Sign up</button>
+                </form>
+                <form class="login" method="post" action="{% url 'login'%}">
+                    {% csrf_token %}
+                    <div class="username_block block">
+                        <label for="id_logusername" class="log_username_lab">Username</label>
+                        {{loginfields.logusername}}
+                    </div>
+                    <div class="password_block block">
+                        <label for="id_logpasword" class="log_password_lab">Password</label>
+                        {{loginfields.logpassword}}
+                    </div>
+                    <button class="login" type="submit">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>   
+    <script src="{% static 'js/register.js' %}"></script>   
 </body>
 </html>

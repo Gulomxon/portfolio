@@ -39,7 +39,7 @@ class PermissionsAccaunt(models.Model):
         help_text="if user is a superuser,it returns True"
     )
     def has_perm(self, perm, obj=None):
-        if self.is_active and self.is_superuser:
+        if self.is_active and self.is_staff:
             return True
     
     def has_module_perms(self, app_label):

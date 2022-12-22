@@ -15,12 +15,14 @@ def register_view(request):
             password = form.cleaned_data['password1']
             accaunt = authenticate(username=username, password=password)
             login(request, accaunt)
-            return redirect('home')
+            return HttpResponseRedirect('/admin/')
         else:
-            context['register_form'] = form
+            context['formfields'] = form
     else:
         form = RegistrationForm()
-        context['register_form'] = form
+    loginform = LoginAccauntForm()
+    context['loginfields'] = loginform
+    context['formfields'] = form
     
     return render(request, 'authentication/register.html', context)
 
@@ -31,27 +33,33 @@ def login_view(request):
         
         form = LoginAccauntForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data['logusername']
+            password = form.cleaned_data['logpassword']
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
                 if request.GET.get('next', None):
-                    return HttpResponseRedirect(request.GET['next'])
-                return redirect('home')
-            
+                    return redirect('admin')
+                return redirect('home')        
     else:
-        form = LoginAccauntForm()
-    context['login_form'] = form
-    return render(request, 'authentication/login.html', context)
+        loginform = LoginAccauntForm()
+        context['loginfields'] = loginform
+    formfields = RegistrationForm()
+    context['formfields'] = formfields
+    loginform = LoginAccauntForm()
+    context['loginfields'] = loginform
+    return render(request, 'authentication/register.html', context)
     
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    context = {}
+    context['log'] = True
+    return redirect('register')
 
 @login_required(login_url='/login/')
 def test(request):
-    CONTEXT ={}
-    return render(request,'pages/test.html', CONTEXT)
+    context ={}
+    return render(request,'pages/test.html', context)
+
 
 

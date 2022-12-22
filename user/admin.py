@@ -11,6 +11,7 @@ class AccauntAdmin(UserAdmin):
     filter_horizontal   = ()
     list_filter         = ()
     fieldsets           = ()
+    
 
 admin.site.register(Accaunt, AccauntAdmin)
 admin.site.unregister(Group)
